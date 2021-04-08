@@ -167,3 +167,5 @@ function stopCamera(){
         console.log('[CanvasCamera stop]', 'data', data);
     });
 }
+
+/* Hej dennis! */
