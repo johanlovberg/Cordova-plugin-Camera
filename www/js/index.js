@@ -4,24 +4,24 @@ document.getElementById("buttonStart").onclick = startFileCreation;
 document.getElementById("buttonStop").onclick = stopCamera;
 var globalFileEntry = "";
 var timeStamp = 0;
-
-var options = {
-CameraFacing:"back",
+let options  = {
+    CameraFacing:"back",
+    fps:30,
+    flashMode:true,
+    use:'data',
 canvas: {
-    width: 350,height: 350
+    width:150,height:150
     },
 capture: { 
-    width: 350,height: 350
+    width:150,height:150
     },
-fps:10,
-flashMode: true,
-use:'data',
-onBeforeDraw:function(frame) { 
-    timeStamp = Date.now(); 
-},
-onAfterDraw:function(frame) {
+    onBeforeDraw:function(frame) { 
+
+        },
+    onAfterDraw:function(frame) {
     getAverageRGB(frame.element.getContext("2d"));
-}
+
+    }
 };
 
 function onDeviceReady() {
@@ -72,15 +72,18 @@ dirEntry.getFile(fileName, {create: true, exclusive: false}, function(fileEntry)
 
 function startCamera(){
     console.log("I start camera")
-    
+    let flashlight = false;
     CanvasCamera.start(options,function(err){
         console.error(err);
 
     },function(data){
-        window.plugin.CanvasCamera.flashMode(true);
-
+        timeStamp = Date.now();
+         if(flashlight == false) {      //Workaround to get flashlight to start on iPhone.
+             window.plugin.CanvasCamera.flashMode(true);
+             flashlight = true;
+         }
+         
     });
-
 }
 
 
@@ -111,7 +114,6 @@ globalFileEntry.file(function (file) {
 
     reader.onloadend = function() {
 /*         console.log("Successful file read: " + this.result); */
-        //displayFileData(globalFileEntry.fullPath + ": " + this.result);
     };
 
     reader.readAsText(file);
@@ -124,7 +126,7 @@ function getAverageRGB(frameElement){
     let G = 0;
     let B = 0;
     let count = 0;
-    imgData = frameElement.getImageData(0, 0, 350, 350);
+    imgData = frameElement.getImageData(0, 0, 150, 150);
     let arr = imgData.data;
     let length = imgData.data.length;
     let avg = 0;
@@ -138,6 +140,7 @@ function getAverageRGB(frameElement){
     avg = avg / count;
     dataObj = new Blob([avg+" "+ timeStamp+ "\n"], { type: 'text/plain' });
     writeFile(dataObj);
+    
 }
 
 function stopCamera(){
