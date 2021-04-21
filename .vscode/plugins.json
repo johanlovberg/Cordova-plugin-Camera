@@ -1,0 +1,1 @@
+{"plugins":["cordova-plugin-whitelist","cordova-plugin-camera","com.virtuoworks.cordova-plugin-canvascamera","cordova-plugin-compat","cordova-plugin-file","cordova-plugin-device"]}
